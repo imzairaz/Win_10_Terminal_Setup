@@ -161,25 +161,42 @@ function Show-ZaiBanner {
 "░░░░░░░░░░░  ░░░░░░░░ ░░░░░ "
 )
 
-    # Nerd Font Icons
+    # Nerd Font Icons — all BMP codepoints (max 0x10FFFF, all below 0xFFFF here)
     $I_USER = [char]0xF007  # nf-fa-user
-    $I_HOST = "󰟀"
+    $I_HOST = [char]0xF233  # nf-fa-server
     $I_OS   = [char]0xF17A  # nf-fa-windows
     $I_SH   = [char]0xE795  # nf-dev-powershell
-    $I_CPU  = "󰍛"
-    $I_RAM  = "󰘚"
-    $I_GPU  = "󰢮"
-    $I_DISK = "󰋊"
-    $I_UP   = "󱫐"
+    $I_CPU  = [char]0xF2DB  # nf-fa-microchip
+    $I_RAM  = [char]0xF538  # nf-fa-memory
+    $I_GPU  = [char]0xF26C  # nf-fa-television
+    $I_DISK = [char]0xF0A0  # nf-fa-hdd-o
+    $I_UP   = [char]0xF017  # nf-fa-clock-o
 
     $info = if ($Fast) { Get-ZaiInfoFast } else { Get-ZaiInfoLive }
 
     if ($Mini) {
         Write-Host ($logo[0]) -ForegroundColor Gray
-        Write-Host ("{0}  {1} {2}" -f $I_USER, "User:", $info.User) -ForegroundColor Cyan
-        Write-Host ("{0}  {1} {2}" -f $I_HOST, "Host:", $info.Host) -ForegroundColor Cyan
-        Write-Host ("{0}  {1} {2}" -f $I_CPU,  "CPU :", $info.CPU)  -ForegroundColor Cyan
-        Write-Host ("{0}  {1} {2}" -f $I_RAM,  "RAM :", $info.RAM)  -ForegroundColor Cyan
+
+        Write-Host $I_USER -NoNewline -ForegroundColor Cyan
+        Write-Host "   User   " -NoNewline -ForegroundColor Cyan
+        Write-Host " ▸ " -NoNewline -ForegroundColor DarkGray
+        Write-Host $info.User -ForegroundColor White
+
+        Write-Host $I_HOST -NoNewline -ForegroundColor Cyan
+        Write-Host "   Host   " -NoNewline -ForegroundColor Cyan
+        Write-Host " ▸ " -NoNewline -ForegroundColor DarkGray
+        Write-Host $info.Host -ForegroundColor White
+
+        Write-Host $I_CPU -NoNewline -ForegroundColor Cyan
+        Write-Host "   CPU    " -NoNewline -ForegroundColor Cyan
+        Write-Host " ▸ " -NoNewline -ForegroundColor DarkGray
+        Write-Host $info.CPU -ForegroundColor White
+
+        Write-Host $I_RAM -NoNewline -ForegroundColor Cyan
+        Write-Host "   RAM    " -NoNewline -ForegroundColor Cyan
+        Write-Host " ▸ " -NoNewline -ForegroundColor DarkGray
+        Write-Host $info.RAM -ForegroundColor White
+
         Write-Host ""
         return
     }
@@ -196,29 +213,28 @@ function Show-ZaiBanner {
         @{ i=$I_UP;   l="Uptime"; v=$info.Uptime }
     )
 
-    $leftWidth  = ($logo | Measure-Object Length -Maximum).Maximum + 2
-    $labelWidth = 7
+    $leftWidth  = ($logo | Measure-Object Length -Maximum).Maximum
+    $labelWidth = 6
     $maxLines   = [Math]::Max($logo.Count, $rows.Count)
 
     for ($n = 0; $n -lt $maxLines; $n++) {
         $left = if ($n -lt $logo.Count) { $logo[$n] } else { "" }
-        Write-Host ($left.PadRight($leftWidth)) -NoNewline -ForegroundColor Gray
+        Write-Host ($left.PadRight($leftWidth + 2)) -NoNewline -ForegroundColor Gray
 
         if ($n -lt $rows.Count) {
             $icon  = $rows[$n].i
             $label = $rows[$n].l.PadRight($labelWidth)
             $value = $rows[$n].v
 
-            Write-Host "  $icon  " -NoNewline -ForegroundColor Cyan
-            Write-Host "$label"    -NoNewline -ForegroundColor Cyan
-            Write-Host " ▸ "       -NoNewline -ForegroundColor DarkGray
-            Write-Host "$value"    -ForegroundColor White
+            Write-Host $icon      -NoNewline -ForegroundColor Cyan
+            Write-Host " "        -NoNewline                        # icon double-width compensator
+            Write-Host "  $label" -NoNewline -ForegroundColor Cyan
+            Write-Host " ▸ "      -NoNewline -ForegroundColor DarkGray
+            Write-Host $value                -ForegroundColor White
         } else {
             Write-Host ""
         }
     }
-
-    Write-Host ""
 }
 
 # ==========================================
