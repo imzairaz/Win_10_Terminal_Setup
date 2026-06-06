@@ -162,10 +162,10 @@ function Show-ZaiBanner {
 )
 
     # Nerd Font Icons
-    $I_USER = ""
+    $I_USER = [char]0xF007  # nf-fa-user
     $I_HOST = "󰟀"
-    $I_OS   = "󰍹"
-    $I_SH   = ""
+    $I_OS   = [char]0xF17A  # nf-fa-windows
+    $I_SH   = [char]0xE795  # nf-dev-powershell
     $I_CPU  = "󰍛"
     $I_RAM  = "󰘚"
     $I_GPU  = "󰢮"
