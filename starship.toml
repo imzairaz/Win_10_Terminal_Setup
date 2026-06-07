@@ -1,3 +1,4 @@
+# After the ASCII Header Below have a empty line this is the Culprit <3
 add_newline = false
 
 "$schema" = "https://starship.rs/config-schema.json"
