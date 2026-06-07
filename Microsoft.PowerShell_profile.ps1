@@ -218,7 +218,7 @@ function Show-ZaiBanner {
         }
     }
 
-    Write-Host ""
+#    Write-Host "" After the ASCII Header Below have a empty line this is the Culprit <3
 }
 
 # ==========================================
